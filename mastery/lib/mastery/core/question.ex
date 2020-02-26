@@ -5,7 +5,13 @@ defmodule Mastery.Core.Question do
   """
   alias Mastery.Core.Template
 
-  defstruct ~w[asked questions template]a
+  defstruct ~w[asked substitutions template]a
+
+  def new(%Template{} = template) do
+    template.generators
+    |> Enum.map(&build_substitution/1)
+    |> evaluate(template)
+  end
 
   ################### private functions ###############
 
@@ -19,5 +25,19 @@ defmodule Mastery.Core.Question do
 
   defp choose(generator) when is_function(generator) do
     generator.()
+  end
+
+  defp compile(template, substitutions) do
+    template.compiled
+    |> Code.eval_quoted(assigns: substitutions)
+    |> elem(0)
+  end
+
+  defp evaluate(substitutions, template) do
+    %__MODULE__{
+      asked: compile(template, substitutions),
+      substitutions: substitutions,
+      template: template
+    }
   end
 end
