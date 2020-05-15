@@ -10,7 +10,8 @@ defmodule Mastery.Core.Template do
   `category`:
   `instructions`: instructions for the user to how to approach the problems
                 created using the template.
-  `raw`: code to generate the questions from this template.
+  `raw`: code to generate the questions from this template a typical example
+    would be "<%= left %> + <%= right %>".
   `compiled`:
   `generators`: would be used to fill in the substitutions.
   `checker`: checker function to check for correct answer.

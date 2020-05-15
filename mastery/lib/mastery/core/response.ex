@@ -15,7 +15,7 @@ defmodule Mastery.Core.Response do
       to: question.asked,
       email: email,
       answer: answer,
-      correct: template.checker.(question.subsitutions, answer),
+      correct: template.checker.(question.substitutions, answer),
       timestamp: DateTime.utc_now()
     }
   end

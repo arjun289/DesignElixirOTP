@@ -133,7 +133,11 @@ defmodule Mastery.Core.Quiz do
   end
 
   defp reset_record(%{current_question: question} = quiz) do
-    Map.put(quiz, :record, question.template.name)
+    Map.put(
+      quiz,
+      :record,
+      Map.delete(quiz.record, question.template.name)
+    )
   end
 
   defp reset_used(%{current_question: question} = quiz) do

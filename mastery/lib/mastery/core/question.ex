@@ -7,6 +7,14 @@ defmodule Mastery.Core.Question do
 
   defstruct ~w[asked substitutions template]a
 
+  @typedoc """
+  `asked`: The text for the question to be shown to the user.
+  `substitutions`: The substitutions for the template.
+  `template`: The template for the question.
+  """
+  @type t :: %__MODULE__{}
+
+  @spec new(Template.t()) :: __MODULE__.t()
   def new(%Template{} = template) do
     template.generators
     |> Enum.map(&build_substitution/1)
@@ -27,17 +35,17 @@ defmodule Mastery.Core.Question do
     generator.()
   end
 
-  defp compile(template, substitutions) do
-    template.compiled
-    |> Code.eval_quoted(assigns: substitutions)
-    |> elem(0)
-  end
-
   defp evaluate(substitutions, template) do
     %__MODULE__{
       asked: compile(template, substitutions),
       substitutions: substitutions,
       template: template
     }
+  end
+
+  defp compile(template, substitutions) do
+    template.compiled
+    |> Code.eval_quoted(assigns: substitutions)
+    |> elem(0)
   end
 end
